@@ -189,4 +189,9 @@ class ProductServiceTest {
         verify(repository, times(1)).findById(product.getId());
         assertEquals(String.format("Produkt med id %d hittades inte", 1), exception.getMessage());
     }
+    @Test
+    void test(){
+        assertEquals(1,2);
+    }
+
 }
