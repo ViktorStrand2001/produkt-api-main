@@ -56,11 +56,17 @@ class ProductServiceTest {
     @Test
     void givenAnExistingCategory_whenGetProductByCategory_thenReceivesANonEmptyList() {
 
-        underTest.getProductsByCategory("category");
+        // given
+        Product product = new Product("",1.0,"my category","","");
 
+        // then
+        underTest.getProductsByCategory("my category");
+
+        // when
         verify(repository, times(1)).findByCategory(stringCaptor.capture());
         verifyNoMoreInteractions(repository);
-        assertEquals("category", stringCaptor.getValue());
+        assertEquals("my category", stringCaptor.getValue());
+        assertFalse(product.getCategory().isEmpty());
     }
 
 
@@ -113,6 +119,7 @@ class ProductServiceTest {
     void whenAddingProductWithDuplicateType_thenThrowError(){
         // given
         String title = "vår test-titel";
+
         Product product = new Product(title, 30.0, "", "", "");
         given(repository.findByTitle("vår test-titel")).willReturn(Optional.of(product));
 
@@ -122,7 +129,7 @@ class ProductServiceTest {
                 () -> underTest.addProduct(product));
         verify(repository, times(1)).findByTitle(title);
         verify(repository, never()).save(any());
-        assertEquals("En produkt med titeln: vår test-titel finns redan", exception.getMessage());
+        assertEquals("En produkt med titeln: " + title + " finns redan", exception.getMessage());
     }
 
     // UPDATE
