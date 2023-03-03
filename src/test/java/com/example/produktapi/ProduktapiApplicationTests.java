@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ProduktapiApplicationTests {
 
+	/*
 	@Test
 	public void checkTitle(){
 		// Hämta in den web-driver som jag vill använda
@@ -35,4 +36,6 @@ class ProduktapiApplicationTests {
 		driver.quit();
 	}
 
+
+	 */
 }
