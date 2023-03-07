@@ -29,9 +29,9 @@ class ProductServiceTest {
     private ProductService underTest; // Här ska fake ProductRepository användas.
 
     @Captor
-    ArgumentCaptor<Product> productCaptor; // Fångar argument
+    ArgumentCaptor<Product> productCaptor; // Fångar Product argument
     @Captor
-    ArgumentCaptor<String> stringCaptor; // Fångar argument
+    ArgumentCaptor<String> stringCaptor; // Fångar String argument
 
     /*
     Product testProduct;
@@ -49,7 +49,7 @@ class ProductServiceTest {
         underTest.getAllProducts();
 
         // then
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAll(); // fail "2"
         verifyNoMoreInteractions(repository); // BDDMockito.
     }
 
@@ -59,14 +59,13 @@ class ProductServiceTest {
         // when
         underTest.getAllCategories();
         // then
-        verify(repository, times(1)).findAllCategories();
+        verify(repository, times(1)).findAllCategories(); // fail "2"
         verifyNoMoreInteractions(repository);
     }
 
     // Get product by category
     @Test
     void givenAnExistingCategory_whenGetProductByCategory_thenReceivesANonEmptyCategory() {
-
         // given
         Product product = new Product("",1.0,"my category","","");
 
@@ -77,7 +76,7 @@ class ProductServiceTest {
         verify(repository, times(1)).findByCategory(stringCaptor.capture());
         verifyNoMoreInteractions(repository);
         assertEquals("my category", stringCaptor.getValue());
-        assertFalse(product.getCategory().isEmpty());
+        assertFalse(product.getCategory().isEmpty()); // rep behövs inte
     }
 
 
@@ -94,13 +93,13 @@ class ProductServiceTest {
 
         // when
         // then
-        assertEquals(product.getId(), testProduct.getId());
+        assertEquals(product.getId(), testProduct.getId()); // fail sätt annat id över 1
         assertEquals(product, testProduct);
     }
 
     @Test
     void givenNonExistingProductId_whenGetProductById_thenThrowsEntityNotFoundException(){
-
+        // given
         given(repository.findById(1)).willReturn(Optional.empty());
 
         // when
@@ -108,7 +107,7 @@ class ProductServiceTest {
                 () -> underTest.getProductById(1));
 
         // then
-        assertEquals(String.format("Produkt med id %d hittades inte", 1), exception.getMessage());
+        assertEquals(String.format("Produkt med id %d hittades inte", 1), exception.getMessage()); // id annat än "1"
     }
 
     // ADD
@@ -123,7 +122,7 @@ class ProductServiceTest {
         verify(repository).save(productCaptor.capture()); // eftersom att mock inte skickar tillbaka något så måste man använda Captor.
 
         //then
-        assertEquals(product, productCaptor.getValue());
+        assertEquals(product, productCaptor.getValue()); // fail skapa ny product som inte matchar.
     }
 
     @Test
@@ -154,7 +153,7 @@ class ProductServiceTest {
         underTest.updateProduct(nyaProduct, product.getId());
 
         verify(repository, times(1)).save(productCaptor.capture());
-        assertEquals(nyaProduct, productCaptor.getValue()); // ändra till "product" för fail
+        assertEquals(nyaProduct, productCaptor.getValue()); // ändra till "product" för fail + fel i metoden
     }
 
     @Test
@@ -194,6 +193,6 @@ class ProductServiceTest {
                 () -> underTest.deleteProduct(1));
 
         verify(repository, never()).deleteById(any());
-        assertEquals(String.format("Produkt med id %d hittades inte", 1), exception.getMessage());
+        assertEquals(String.format("Produkt med id %d hittades inte", 1), exception.getMessage()); // fail id 2
     }
 }
