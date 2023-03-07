@@ -138,7 +138,7 @@ class ProductServiceTest {
 
         verify(repository, times(1)).findByTitle(product.getTitle());
         verify(repository, never()).save(product);
-        assertEquals("En produkt med titeln: " + "test" + " finns redan", exception.getMessage());
+        assertEquals("En produkt med titeln: " + "test" + " finns redan", exception.getMessage()); // fail bytt test
     }
 
     // UPDATE
@@ -154,7 +154,7 @@ class ProductServiceTest {
         underTest.updateProduct(nyaProduct, product.getId());
 
         verify(repository, times(1)).save(productCaptor.capture());
-        assertEquals(nyaProduct, productCaptor.getValue());
+        assertEquals(nyaProduct, productCaptor.getValue()); // ändra till "product" för fail
     }
 
     @Test
@@ -165,7 +165,7 @@ class ProductServiceTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> underTest.updateProduct(any(), 1));
 
-        assertEquals(String.format("Produkt med id %d hittades inte", 1), exception.getMessage());
+        assertEquals(String.format("Produkt med id %d hittades inte", 1), exception.getMessage()); // För fail ändra id till 2 på ena
     }
 
     // DELETE
