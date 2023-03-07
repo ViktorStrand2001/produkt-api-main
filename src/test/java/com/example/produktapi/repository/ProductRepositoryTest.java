@@ -62,7 +62,7 @@ class ProductRepositoryTest {
         underTest.save(product);
 
         // when
-        Optional<Product> optionalProduct = underTest.findByTitle("En dator");
+        Optional<Product> optionalProduct = underTest.findByTitle("En dator"); // Fail "Radio"
 
         // then
         Assertions.assertAll(
@@ -104,7 +104,7 @@ class ProductRepositoryTest {
 
         List<String> listProduct = underTest.findAllCategories();
 
-        assertFalse(listProduct.size() > 4); // Fail annat än 4
+        assertTrue(listProduct.size() == 4); // Fail annat än 4
         assertEquals(categorys, listProduct); // Jämför Listorna så det ej finns dubbel
     }
 }
